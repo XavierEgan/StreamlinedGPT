@@ -2,7 +2,7 @@ from openai import OpenAI
 client = OpenAI()
 import json
 
-class easyGPT:
+class EasyGPT:
 
     class tool:
         def  __init__(self, toolFunction, toolName : str, toolDescription : str, arguments : list):
@@ -117,15 +117,3 @@ class easyGPT:
             })
 
 
-if __name__ == "__main__":
-    def whatImThinking():
-        return "I am thinking about how to make this code better."
-    
-    assistantObj = easyGPT.assistant("you are a helpful assistant", "gpt-4o-mini")
-    assistantObj.addTool(easyGPT.tool(whatImThinking, "whatImThinking", "tells you what the user is thinking", []))
-
-    while True:
-        request = input("USER > ")
-        assistantObj.addUserMessageToHistory(request)
-        response = assistantObj.getResponseWithHistory()
-        print(f"ASSISTANT > {response}")
