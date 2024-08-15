@@ -4,7 +4,6 @@ custom OpenAI API that makes it a lot easiser
 ## Documentations
 ##### ill write proper docs later
 examples: chatbot
-this is a lot easier than using the api directly.
 ```python
 from EasyGPT.Library import EasyGPT
 
