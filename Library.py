@@ -1,6 +1,11 @@
 from openai import OpenAI
-client = OpenAI()
 import json
+
+try:
+    client = OpenAI()
+except:
+    from .secrets.OpenAiKey import key
+    client = OpenAI(api_key=key)
 
 class EasyGPT:
 
