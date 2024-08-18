@@ -14,7 +14,10 @@ class prebuiltTools:
     def _execute(self, code):
         localDict = {}
 
-        exec(code, None, localDict)
+        try:
+            exec(code, None, localDict)
+        except Exception as e:
+            return f"code had an error: {e}"
         
         returnDict = {}
 

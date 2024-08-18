@@ -8,7 +8,6 @@ except:
     client = OpenAI(api_key=key)
 
 class EasyGPT:
-
     class tool:
         def  __init__(self, function, name : str, description : str, arguments : list):
             self.function = function
@@ -120,5 +119,3 @@ class EasyGPT:
                 }),
                 "tool_call_id": aiResponse.message.tool_calls[0].id
             })
-
-
