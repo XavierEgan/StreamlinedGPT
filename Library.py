@@ -113,8 +113,11 @@ class EasyGPT:
         def _manageTool(self, aiResponse):
             toolCall = aiResponse.message.tool_calls[0].function
 
-            toolResponse = self.toolLog[toolCall.name](**json.loads(toolCall.arguments))
-
+            try:
+                toolResponse = self.toolLog[toolCall.name](**json.loads(toolCall.arguments))
+            except Exception as e:
+                toolResponse = "the following error occured: {e}"
+            
             self._addToolResponseToHistory(aiResponse, toolResponse)
 
         def _addToolResponseToHistory(self, aiResponse, toolResponse):
