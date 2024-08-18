@@ -88,6 +88,12 @@ class EasyGPT:
             else:
                 print("SOMETHING WENT WRONG AND AI STOPPED WERIDLY")
         
+        def chatLoopCLI(self):
+            while True:
+                userMessage = input("USER > ")
+                self.addUserMessageToHistory(userMessage)
+                print(f"ASSISTANT > {self.getAiResponse()}")
+        
         def _getAiResponse(self, tools: bool = True):
             if tools:
                 return client.chat.completions.create(
