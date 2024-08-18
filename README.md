@@ -2,6 +2,54 @@
 EasyGPT is a custom OpenAI API that allows for easy interaction with the OpenAI API and management of tools. It sacrifices functionality for ease of use and maintainability.
 
 ## Quick Start
+skip to step 5 if you already have your API key set as a system variable
+
+### Step 1: Create OpenAI Account
+go to https://platform.openai.com/docs/overview and set up an account
+
+### Step 2: Add Money To Account
+press the gear in the top right corner\
+press billing on the menu to the left\
+press `Add to credit balance`\
+you do not need much money, a single dollar will last you aproximetly 937500 words for GPT-4o-mini
+
+### Step 3: Create API key
+press dashboard on the top right corner\
+press API keys\
+press `+ Create new secret key`
+copy this key - DO NOT SHARE IT WITH ANYONE
+
+### Step 4: use API key
+there are two ways to get the API key into python.
+### Option 1: Put in secrets file
+in the EasyGPT > secrets > OpenAiKey.py set the `key` variable to your api key (as a string)
+```Python
+key = "uh78g40w8g4hwbg0ui456h8u0yg2h08g2456082345"
+```
+if you are going to contribute then you should do the following:
+in the EasyGPT > secrets folder, make a new file and name it ".gitignore". It it, put a single star `*`. This will make github ignore your secrets file, and minimise the chance you accidentaly expose your api key.
+
+### Option 2: Set system variable
+press the windows key and type "system var", then press `Edit the system environment variables`
+press `advanced` in the top menu
+press `Environment Variables...`
+press `New...` that is below the top box
+name it `OPENAI_API_KEY` and make its value your api key
+the library should now work
+
+
+### Step 5: Download the library
+press the green `<> code` button
+press download zip
+extract the zip in the same folder as where you want to code
+
+### Step 6: Download requirements
+copy the full path to the `requirements.txt` file and run the following command in a terminal `pip install -r "/path/to/your/project/requirements.txt"`
+
+### Step 7: Import the library
+in python type `from EasyGPT.Library import EasyGPT`. This will give you the EasyGPT class, which is explained below.
+
+
 below is a simple example showing how the library is intended too be used. It defines "calculator" and then builds a tool the Ai can use.
 ```python
 from EasyGPT.Library import EasyGPT
