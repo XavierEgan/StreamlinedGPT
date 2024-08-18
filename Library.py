@@ -78,7 +78,7 @@ class EasyGPT:
             aiResponse = self._getAiResponse()
             self._addAiResponseToHistory(aiResponse)
 
-            if aiResponse.finish_reason == "stop":
+            if aiResponse.finish_reason in ["stop", "length", "content_filter"]:
                 return(aiResponse.message.content)
 
             elif aiResponse.finish_reason == "tool_calls":
@@ -86,7 +86,7 @@ class EasyGPT:
                 return self.getAiResponse()
             
             else:
-                print("SOMETHING WENT WRONG AND AI STOPPED WERIDLY")
+                print("ai's stop reason was unexpected (probably a function call)")
         
         def chatLoopCLI(self):
             while True:
