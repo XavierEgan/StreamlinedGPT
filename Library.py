@@ -10,10 +10,10 @@ except:
 class EasyGPT:
 
     class tool:
-        def  __init__(self, toolFunction, toolName : str, toolDescription : str, arguments : list):
-            self.toolFunction = toolFunction
-            self.toolName = toolName
-            self.toolDescription = toolDescription
+        def  __init__(self, function, name : str, description : str, arguments : list):
+            self.function = function
+            self.name = name
+            self.description = description
             self.arguments = arguments
 
         class argument:
@@ -51,8 +51,8 @@ class EasyGPT:
             toolString = {
                     "type" : "function",
                     "function" : {
-                        "name" : tool.toolName,
-                        "description" : tool.toolDescription,
+                        "name" : tool.name,
+                        "description" : tool.description,
                         "parameters" : {
                             "type" : "object",
                             "properties" : arguments,
@@ -66,7 +66,7 @@ class EasyGPT:
             self.tools.append(toolString)
 
             # add the tool to the tool log
-            self.toolLog[tool.toolName] = tool.toolFunction
+            self.toolLog[tool.name] = tool.function
         
         def addUserMessageToHistory(self, message : str):
             self.messageHistory.append({
