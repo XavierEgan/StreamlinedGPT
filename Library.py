@@ -18,16 +18,16 @@ class EasyGPT:
 
         class argument:
             '''
-            argumentName: the name of the argument
-            argumentType: "array", "string", "number", "boolean"
-            argumentDescription: the description of the argument that is given to the model. Specify what it does and when and how the model should use it.
+            name: the name of the argument
+            type: "array", "string", "number", "boolean"
+            description: the description of the argument that is given to the model. Specify what it does and when and how the model should use it.
             '''
-            def __init__(self, argumentName : str, argumentType : str, argumentDescription : str, isRequired : bool = True):
-                if not argumentType.lower() in ["array", "string", "number", "boolean"]:
-                    raise TypeError("argumentType is wrong")
-                self.argumentName = argumentName
-                self.argumentType = argumentType
-                self.argumentDescription = argumentDescription
+            def __init__(self, name : str, type : str, description : str, isRequired : bool = True):
+                if not type.lower() in ["array", "string", "number", "boolean"]:
+                    raise TypeError("type is wrong")
+                self.name = name
+                self.type = type
+                self.description = description
                 self.isRequired = isRequired
     
     class assistant:
@@ -42,9 +42,9 @@ class EasyGPT:
             # extract the arguments
             arguments = {}
             for argument in tool.arguments:
-                arguments[argument.argumentName] = {
-                    "type" : argument.argumentType,
-                    "description" : argument.argumentDescription
+                arguments[argument.name] = {
+                    "type" : argument.type,
+                    "description" : argument.description
                 }
 
             # build the tool description for the ai
@@ -56,7 +56,7 @@ class EasyGPT:
                         "parameters" : {
                             "type" : "object",
                             "properties" : arguments,
-                            "required" : [i.argumentName for i in tool.arguments if i.isRequired],
+                            "required" : [i.name for i in tool.arguments if i.isRequired],
                             "additionalProperties" : False
                         }
                     }
@@ -74,7 +74,7 @@ class EasyGPT:
                 "content": f"{message}"
             })
 
-        def getResponseWithHistory(self):
+        def getAiResponse(self):
 
             aiResponse = self._getAiResponse()
             self._addAiResponseToHistory(aiResponse)
@@ -84,7 +84,7 @@ class EasyGPT:
 
             elif aiResponse.finish_reason == "tool_calls":
                 self._manageTool(aiResponse)
-                return self.getResponseWithHistory()
+                return self.getAiResponse()
             
             else:
                 print("SOMETHING WENT WRONG AND AI STOPPED WERIDLY")
