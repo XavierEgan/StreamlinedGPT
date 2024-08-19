@@ -1,7 +1,7 @@
-# from the parent file to EasyGPT run:
-# python -m EasyGPT.tests
+# from the parent file to StreamlinedGPT run:
+# python -m StreamlinedGPT.tests
 
-from .Library import EasyGPT
+from .Library import StreamlinedGPT
 from .prebuilts import prebuiltTools
 
 errorLog = []
@@ -21,7 +21,7 @@ def runTest(func):
 def test1() -> list[bool, Exception | None]:
     # test that ensures chat functionality with no tools works
     try:
-        assistant = EasyGPT.assistant("dont respond with anything", "gpt-4o-mini")
+        assistant = StreamlinedGPT.assistant("dont respond with anything", "gpt-4o-mini")
         assistant.addUserMessageToHistory("dont respond with anything")
         assistant.getAiResponse()
         return [True]
@@ -32,22 +32,22 @@ def test1() -> list[bool, Exception | None]:
 def test2() -> list[bool, Exception | None]:
     # test to make sure tools work
     try:
-        assistant = EasyGPT.assistant("your a helpful assistant", "gpt-4o-mini")
+        assistant = StreamlinedGPT.assistant("your a helpful assistant", "gpt-4o-mini")
 
         def add(a,b):
             return a+b
 
-        assistant.addTool(EasyGPT.tool(
+        assistant.addTool(StreamlinedGPT.tool(
             name="add",
             description="add two numbers",
             function=add,
             arguments=[
-                EasyGPT.tool.argument(
+                StreamlinedGPT.tool.argument(
                     name="a",
                     type="number",
                     description="the first number to add"
                 ),
-                EasyGPT.tool.argument(
+                StreamlinedGPT.tool.argument(
                     name="b",
                     type="number",
                     description="the second number to add"
@@ -64,7 +64,7 @@ def test2() -> list[bool, Exception | None]:
 def test3() -> list[bool, Exception | None]:
     # test the prebuilt functions
     try:
-        assistant = EasyGPT.assistant("your a helpful assistant", "gpt-4o-mini")
+        assistant = StreamlinedGPT.assistant("your a helpful assistant", "gpt-4o-mini")
         assistant.addTool(prebuiltTools().runPythonCode)
         assistant.addUserMessageToHistory("calculate the 3rd fibbonaci number with code")
         assistant.getAiResponse()
@@ -76,7 +76,7 @@ def test3() -> list[bool, Exception | None]:
 def test4() -> list[bool, Exception | None]:
     # test behaviour when multiple tools are called
     try:
-        assistant = EasyGPT.assistant("your a helpful assistant", "gpt-4o-mini")
+        assistant = StreamlinedGPT.assistant("your a helpful assistant", "gpt-4o-mini")
         class response:
             def __init__(self):
                 self.message = {"tool_calls": [{"id": "tool_call_1"},{"id": "tool_call_1"},{"id": "tool_call_1"},{"id": "tool_call_1"},{"id": "tool_call_1"}]}

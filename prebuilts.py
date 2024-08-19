@@ -1,13 +1,13 @@
-from .Library import EasyGPT
+from .Library import StreamlinedGPT
 
 class prebuiltTools:
     def __init__(self):
-        self.runPythonCode = EasyGPT.tool(
+        self.runPythonCode = StreamlinedGPT.tool(
             function=self._execute,
             name="execute",
             description="execute python code. Returns a dictionary of every variable in the code.",
             arguments=[
-                EasyGPT.tool.argument("code", "string", "the code that is ran")
+                StreamlinedGPT.tool.argument("code", "string", "the code that is ran")
             ]
         )
 
