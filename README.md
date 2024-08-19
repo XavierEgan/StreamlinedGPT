@@ -26,8 +26,7 @@ in the EasyGPT > secrets > OpenAiKey.py set the `key` variable to your api key (
 ```Python
 key = "uh78g40w8g4hwbg0ui456h8u0yg2h08g2456082345"
 ```
-if you are going to contribute then you should do the following:
-in the EasyGPT > secrets folder, make a new file and name it ".gitignore". It it, put a single star `*`. This will make github ignore your secrets file, and minimise the chance you accidentaly expose your api key.
+make sure you dont accidentally push your key.
 
 ### Option 2: Set system variable
 press the windows key and type "system var", then press `Edit the system environment variables`
