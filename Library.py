@@ -74,8 +74,11 @@ class EasyGPT:
             })
 
         def getAiResponse(self):
-
-            aiResponse = self._getAiResponse()
+            
+            if len(self.toolLog) == 0:
+                aiResponse = self._getAiResponse(tools=False)
+            else:
+                aiResponse = self._getAiResponse()
             self._addAiResponseToHistory(aiResponse)
 
             if aiResponse.finish_reason in ["stop", "length", "content_filter"]:
