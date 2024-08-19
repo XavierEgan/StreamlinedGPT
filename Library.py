@@ -14,6 +14,7 @@ class EasyGPT:
             self.name = name
             self.description = description
             self.arguments = arguments
+            
 
         class argument:
             '''
@@ -30,12 +31,14 @@ class EasyGPT:
                 self.isRequired = isRequired
     
     class assistant:
-        def __init__(self, systemMessage : str, model : str):
+        def __init__(self, systemMessage : str, model : str, maxToolCall : int = 5):
             self.systemMessage = systemMessage
             self.model = model
             self.tools = []
             self.messageHistory = [{"role": "system", "content": systemMessage}]
             self.toolLog = {}
+            self.maxFunctionCalls = maxToolCall
+            self.toolCallCount = 0
 
         def addTool(self, tool : object):
             # extract the arguments
@@ -74,11 +77,14 @@ class EasyGPT:
             })
 
         def getAiResponse(self):
-            
             if len(self.toolLog) == 0:
                 aiResponse = self._getAiResponse(tools=False)
             else:
-                aiResponse = self._getAiResponse()
+                if self.toolCallCount >= self.maxFunctionCalls:
+                    aiResponse = self._getAiResponse(tools=False)
+                else:
+                    aiResponse = self._getAiResponse()
+
             self._addAiResponseToHistory(aiResponse)
 
             if aiResponse.finish_reason in ["stop", "length", "content_filter"]:
@@ -99,12 +105,14 @@ class EasyGPT:
         
         def _getAiResponse(self, tools: bool = True):
             if tools:
+                self.toolCallCount += 1
                 return client.chat.completions.create(
                     model=f"{self.model}",
                     messages=self.messageHistory,
                     tools=self.tools
                 ).choices[0]
             else:
+                self.toolCallCount += 1
                 return client.chat.completions.create(
                     model=f"{self.model}",
                     messages=self.messageHistory
@@ -114,20 +122,21 @@ class EasyGPT:
             self.messageHistory.append(response.message)
 
         def _manageTool(self, aiResponse):
-            toolCall = aiResponse.message.tool_calls[0].function
+            for call in range(len(aiResponse.message.tool_calls)):
+                toolCall = aiResponse.message.tool_calls[call].function
 
-            try:
-                toolResponse = self.toolLog[toolCall.name](**json.loads(toolCall.arguments))
-            except Exception as e:
-                toolResponse = "the following error occured: {e}"
-            
-            self._addToolResponseToHistory(aiResponse, toolResponse)
+                try:
+                    toolResponse = self.toolLog[toolCall.name](**json.loads(toolCall.arguments))
+                except Exception as e:
+                    toolResponse = f"the following error occured: {e}"
+                
+                self._addToolResponseToHistory(aiResponse, toolResponse, call)
 
-        def _addToolResponseToHistory(self, aiResponse, toolResponse):
+        def _addToolResponseToHistory(self, aiResponse, toolResponse, toolCallId):
             self.messageHistory.append({
                 "role": "tool",
                 "content": json.dumps({
                     "result": toolResponse
                 }),
-                "tool_call_id": aiResponse.message.tool_calls[0].id
+                "tool_call_id": aiResponse.message.tool_calls[toolCallId].id
             })
