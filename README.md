@@ -1,5 +1,5 @@
-# EasyGPT
-EasyGPT is a custom OpenAI API that allows for easy interaction with the OpenAI API and management of tools. It sacrifices functionality for ease of use and maintainability.
+# StreamlinedGPT
+StreamlinedGPT is a custom OpenAI API that allows for easy interaction with the OpenAI API and management of tools. It sacrifices functionality for ease of use and maintainability.
 
 ## Quick Start
 skip to step 5 if you already have your API key set as a system variable
@@ -22,7 +22,7 @@ copy this key - DO NOT SHARE IT WITH ANYONE
 ### Step 4: use API key
 there are two ways to get the API key into python.
 ### Option 1: Put in secrets file
-in the EasyGPT > secrets > OpenAiKey.py set the `key` variable to your api key (as a string)
+in the StreamlinedGPT > secrets > OpenAiKey.py set the `key` variable to your api key (as a string)
 ```Python
 key = "uh78g40w8g4hwbg0ui456h8u0yg2h08g2456082345"
 ```
@@ -46,12 +46,12 @@ extract the zip in the same folder as where you want to code
 copy the full path to the `requirements.txt` file and run the following command in a terminal `pip install -r "/path/to/your/project/requirements.txt"`
 
 ### Step 7: Import the library
-in python type `from EasyGPT.Library import EasyGPT`. This will give you the EasyGPT class, which is explained below.
+in python type `from StreamlinedGPT.Library import StreamlinedGPT`. This will give you the StreamlinedGPT class, which is explained below.
 
 
 below is a simple example showing how the library is intended too be used. It defines "calculator" and then builds a tool the Ai can use.
 ```python
-from EasyGPT.Library import EasyGPT
+from StreamlinedGPT.Library import StreamlinedGPT
 
 # create a function/tool the AI will have access to
 def calculator(expression: str):
@@ -61,15 +61,15 @@ def calculator(expression: str):
         return f"error: {e}"
 
 # create an assistant with a system message and model (full list of models can be found on OpenAI's website)
-assistant = EasyGPT.assistant(systemMessage="you are a helpfull assistant", model="gpt-4o-mini")
+assistant = StreamlinedGPT.assistant(systemMessage="you are a helpfull assistant", model="gpt-4o-mini")
 
 # add a tool
-assistant.addTool(EasyGPT.tool(
+assistant.addTool(StreamlinedGPT.tool(
     function=calculator, 
     name="calculator", 
     description="give a string and the function will evaluate it",
     arguments=[
-        EasyGPT.tool.argument(name="expression", type="string", description="the expression that is evaluated")
+        StreamlinedGPT.tool.argument(name="expression", type="string", description="the expression that is evaluated")
     ]
 ))
 
@@ -78,35 +78,35 @@ assistant.chatLoopCLI()
 ```
 below is another example using one of the prebuilt tools
 ```python
-from EasyGPT.Library import EasyGPT
-from EasyGPT.prebuilts import prebuiltTools
+from StreamlinedGPT.Library import StreamlinedGPT
+from StreamlinedGPT.prebuilts import prebuiltTools
 
-assistant = EasyGPT.assistant("you are a helpful assistant", "gpt-4o-mini")
+assistant = StreamlinedGPT.assistant("you are a helpful assistant", "gpt-4o-mini")
 assistant.addTool(prebuiltTools().runPythonCode)
 
 assistant.chatLoopCLI()
 ```
 ## Documentation
-### class `EasyGPT`
+### class `StreamlinedGPT`
 #### class `tool(function : str, name : str, description : str, arguments : list)`
-represents a tool the model can access. arguments should be a list of EasyGPT.tool.argument(s)\
+represents a tool the model can access. arguments should be a list of StreamlinedGPT.tool.argument(s)\
 example
 ```python
-runPythonCode = EasyGPT.tool(
+runPythonCode = StreamlinedGPT.tool(
     function=execute,
     name="execute",
     description="execute python code. Returns a dictionary of every variable in the code.",
     arguments=[
-        EasyGPT.tool.argument("code", "string", "the code that is ran")
+        StreamlinedGPT.tool.argument("code", "string", "the code that is ran")
     ]
 ) 
 ```
 
 ##### class `argument(name : str, type : str, description : str, isRequired : bool)
-represents an argument for a tool. Pass into the `arguments` argument of the EasyGPT.tool\
+represents an argument for a tool. Pass into the `arguments` argument of the StreamlinedGPT.tool\
 example
 ```python
-EasyGPT.tool.argument("code", "string", "the code that is ran")
+StreamlinedGPT.tool.argument("code", "string", "the code that is ran")
 ```
 
 #### class `assistant(systemMessage : str, model : str)`
