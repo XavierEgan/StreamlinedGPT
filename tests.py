@@ -89,6 +89,19 @@ def test4() -> list[bool, Exception | None]:
 @runTest    
 def test5() -> list[bool, Exception | None]:
     try:
+        def sumnumber(numList):
+            return sum(numList)
+        assistant = StreamlinedGPT.assistant("you are a helpful asssistant", "gpt-4o-mini")
+        assistant.addTool(StreamlinedGPT.tool(
+            name="sum",
+            description="sums a list of numbers",
+            function=sumnumber,
+            arguments=[
+                StreamlinedGPT.tool.argument("numList", "array", "number that will be summed", listType="number")
+            ]
+        ))
+        assistant.addUserMessageToHistory("can you sum 5478932 8974 45982 5237849 using your built in function")
+        assistant.getAiResponse()
         return [True]
     except Exception as e:
         return [False, e]

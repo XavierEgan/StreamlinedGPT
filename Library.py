@@ -22,13 +22,14 @@ class StreamlinedGPT:
             type: "array", "string", "number", "boolean"
             description: the description of the argument that is given to the model. Specify what it does and when and how the model should use it.
             '''
-            def __init__(self, name : str, type : str, description : str, isRequired : bool = True):
+            def __init__(self, name : str, type : str, description : str, isRequired : bool = True, listType = "string"):
                 if not type.lower() in ["array", "string", "number", "boolean"]:
                     raise TypeError("type is wrong")
                 self.name = name
                 self.type = type
                 self.description = description
                 self.isRequired = isRequired
+                self.listType = listType
     
     class assistant:
         def __init__(self, systemMessage : str, model : str, maxToolCall : int = 5):
@@ -44,10 +45,19 @@ class StreamlinedGPT:
             # extract the arguments
             arguments = {}
             for argument in tool.arguments:
-                arguments[argument.name] = {
-                    "type" : argument.type,
-                    "description" : argument.description
-                }
+                if argument.type == "array":
+                    arguments[argument.name] = {
+                        "type" : argument.type,
+                        "items" : {
+                            "type" : f"{argument.listType}"
+                        },
+                        "description" : argument.description
+                    }
+                else:
+                    arguments[argument.name] = {
+                        "type" : argument.type,
+                        "description" : argument.description
+                    }
 
             # build the tool description for the ai
             toolString = {
