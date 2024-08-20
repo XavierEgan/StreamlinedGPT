@@ -5,7 +5,7 @@ class prebuiltTools:
         self.runPythonCode = StreamlinedGPT.tool(
             function=self._execute,
             name="execute",
-            description="execute python code. Returns a dictionary of every variable in the code.",
+            description="execute python code. Returns a dictionary of every variable in the code. In order to get information out, set a global variable which will be returned",
             arguments=[
                 StreamlinedGPT.tool.argument("code", "string", "the code that is ran")
             ]
