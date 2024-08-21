@@ -1,5 +1,5 @@
 # StreamlinedGPT
-StreamlinedGPT is a custom OpenAI API that allows for easy interaction with the OpenAI API and management of tools. It sacrifices functionality for ease of use and maintainability.
+StreamlinedGPT is a custom OpenAI Library that allows for easy interaction with the OpenAI API and management of tools. It sacrifices functionality for ease of use and maintainability.
 
 ## Quick Start
 skip to step 5 if you already have your API key set as a system variable
