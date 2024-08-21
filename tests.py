@@ -105,12 +105,21 @@ def test5() -> list[bool, Exception | None]:
         return [True]
     except Exception as e:
         return [False, e]
+
+@runTest
+def test6() -> list[bool, Exception | None]:
+    try:
+        StreamlinedGPT.getResponse("hello", "gpt-4o-mini")
+        return [True]
+    except Exception as e:
+        return [False, e]
     
 test1()
 test2()
 test3()
 test4()
 test5()
+test6()
 
 if not len(errorLog) == 0:
     for error in errorLog:

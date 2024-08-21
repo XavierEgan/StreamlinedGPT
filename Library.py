@@ -31,6 +31,18 @@ class StreamlinedGPT:
                 self.isRequired = isRequired
                 self.listType = listType
     
+    def getResponse(message, model):
+        messages = [{
+            "role" : "user",
+            "content" : f"{message}"
+        }]
+
+        return client.chat.completions.create(
+            model=f"{model}",
+            messages=messages
+        ).choices[0].message.content
+    
+
     class assistant:
         def __init__(self, systemMessage : str, model : str, maxToolCall : int = 5):
             self.systemMessage = systemMessage
