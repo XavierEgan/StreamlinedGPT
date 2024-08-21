@@ -88,6 +88,8 @@ assistant.chatLoopCLI()
 ```
 ## Documentation
 ### class `StreamlinedGPT`
+#### method `getResponse(message : str, model : str)`
+simply gets a response from the model.
 #### class `tool(function : str, name : str, description : str, arguments : list)`
 represents a tool the model can access. arguments should be a list of StreamlinedGPT.tool.argument(s)\
 example
