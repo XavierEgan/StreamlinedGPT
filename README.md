@@ -130,3 +130,32 @@ starts a loop in the command line where the user is prompted to input a message,
 
 ### class `prebuiltTools`
 Class that contains some prebuilt tools that you can use.
+
+## Examples:
+### Voice Assistant
+```python
+from StreamlinedGPT.text import text
+from StreamlinedGPT.prebuilts import prebuiltTools
+from StreamlinedGPT.audio import audio
+
+audioObj = audio(r"your path here")
+
+assistant = text.assistant("you are a helpfull voice assistant. Try keep responses relativally short and to the point.", "gpt-4o-mini")
+assistant.addTool(prebuiltTools().runPythonCode)
+
+while True:
+    userInputText = audioObj.speechToText("f17")
+    assistant.addUserMessageToHistory(userInputText)
+    response = assistant.getAiResponse()
+    audioObj.textToSpeech(response, "f16")
+```
+### console assistant
+```python
+from StreamlinedGPT.text import text
+from StreamlinedGPT.prebuilts import prebuiltTools
+
+assistant = text.assistant("you are a helpful assistant", "gpt-4o-mini")
+assistant.addTool(prebuiltTools().runPythonCode)
+assistant.addTool(prebuiltTools().autoPrompt)
+assistant.chatLoopCLI()
+```
