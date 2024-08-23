@@ -113,6 +113,15 @@ def test6() -> list[bool, Exception | None]:
         return [True]
     except Exception as e:
         return [False, e]
+
+@runTest
+def test6() -> list[bool, Exception | None]:
+    try:
+        assistant = text.assistant("you are a helpful assistant", "gpt-4o-mini")
+        assistant.addTool(prebuiltTools().autoPrompt)
+        return [True]
+    except Exception as e:
+        return [False, e]
     
 test1()
 test2()
