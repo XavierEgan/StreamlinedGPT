@@ -46,12 +46,12 @@ extract the zip in the same folder as where you want to code
 copy the full path to the `requirements.txt` file and run the following command in a terminal `pip install -r "/path/to/your/project/requirements.txt"`
 
 ### Step 7: Import the library
-in python type `from StreamlinedGPT.Library import StreamlinedGPT`. This will give you the StreamlinedGPT class, which is explained below.
+in python type `from StreamlinedGPT.text import text`. This will give you the text class, which is explained below.
 
 
 below is a simple example showing how the library is intended too be used. It defines "calculator" and then builds a tool the Ai can use.
 ```python
-from StreamlinedGPT.Library import StreamlinedGPT
+from StreamlinedGPT.text import text
 
 # create a function/tool the AI will have access to
 def calculator(expression: str):
@@ -61,15 +61,15 @@ def calculator(expression: str):
         return f"error: {e}"
 
 # create an assistant with a system message and model (full list of models can be found on OpenAI's website)
-assistant = StreamlinedGPT.assistant(systemMessage="you are a helpfull assistant", model="gpt-4o-mini")
+assistant = text.assistant(systemMessage="you are a helpfull assistant", model="gpt-4o-mini")
 
 # add a tool
-assistant.addTool(StreamlinedGPT.tool(
+assistant.addTool(text.tool(
     function=calculator, 
     name="calculator", 
     description="give a string and the function will evaluate it",
     arguments=[
-        StreamlinedGPT.tool.argument(name="expression", type="string", description="the expression that is evaluated")
+        text.tool.argument(name="expression", type="string", description="the expression that is evaluated")
     ]
 ))
 
@@ -78,37 +78,38 @@ assistant.chatLoopCLI()
 ```
 below is another example using one of the prebuilt tools
 ```python
-from StreamlinedGPT.Library import StreamlinedGPT
+from StreamlinedGPT.text import text
 from StreamlinedGPT.prebuilts import prebuiltTools
 
-assistant = StreamlinedGPT.assistant("you are a helpful assistant", "gpt-4o-mini")
+assistant = text.assistant("you are a helpful assistant", "gpt-4o-mini")
 assistant.addTool(prebuiltTools().runPythonCode)
 
 assistant.chatLoopCLI()
 ```
 ## Documentation
-### class `StreamlinedGPT`
+### class `text`
+this class houses the methods and classes associated with text. It handles creating an assistant, getting responses from them and handling tools.
 #### method `getResponse(message : str, model : str)`
 simply gets a response from the model.
 #### class `tool(function : str, name : str, description : str, arguments : list)`
-represents a tool the model can access. arguments should be a list of StreamlinedGPT.tool.argument(s)\
+represents a tool the model can access. arguments should be a list of text.tool.argument(s)\
 example
 ```python
-runPythonCode = StreamlinedGPT.tool(
+runPythonCode = text.tool(
     function=execute,
     name="execute",
     description="execute python code. Returns a dictionary of every variable in the code.",
     arguments=[
-        StreamlinedGPT.tool.argument("code", "string", "the code that is ran")
+        text.tool.argument("code", "string", "the code that is ran")
     ]
 ) 
 ```
 
 ##### class `argument(name : str, type : str, description : str, isRequired : bool)
-represents an argument for a tool. Pass into the `arguments` argument of the StreamlinedGPT.tool\
+represents an argument for a tool. Pass into the `arguments` argument of the text.tool\
 example
 ```python
-StreamlinedGPT.tool.argument("code", "string", "the code that is ran")
+text.tool.argument("code", "string", "the code that is ran")
 ```
 
 #### class `assistant(systemMessage : str, model : str)`

@@ -1,7 +1,7 @@
 # from the parent file to StreamlinedGPT run:
 # python -m StreamlinedGPT.tests
 
-from .Library import StreamlinedGPT
+from .text import text
 from .prebuilts import prebuiltTools
 
 errorLog = []
@@ -21,7 +21,7 @@ def runTest(func):
 def test1() -> list[bool, Exception | None]:
     # test that ensures chat functionality with no tools works
     try:
-        assistant = StreamlinedGPT.assistant("dont respond with anything", "gpt-4o-mini")
+        assistant = text.assistant("dont respond with anything", "gpt-4o-mini")
         assistant.addUserMessageToHistory("dont respond with anything")
         assistant.getAiResponse()
         return [True]
@@ -32,22 +32,22 @@ def test1() -> list[bool, Exception | None]:
 def test2() -> list[bool, Exception | None]:
     # test to make sure tools work
     try:
-        assistant = StreamlinedGPT.assistant("your a helpful assistant", "gpt-4o-mini")
+        assistant = text.assistant("your a helpful assistant", "gpt-4o-mini")
 
         def add(a,b):
             return a+b
 
-        assistant.addTool(StreamlinedGPT.tool(
+        assistant.addTool(text.tool(
             name="add",
             description="add two numbers",
             function=add,
             arguments=[
-                StreamlinedGPT.tool.argument(
+                text.tool.argument(
                     name="a",
                     type="number",
                     description="the first number to add"
                 ),
-                StreamlinedGPT.tool.argument(
+                text.tool.argument(
                     name="b",
                     type="number",
                     description="the second number to add"
@@ -64,7 +64,7 @@ def test2() -> list[bool, Exception | None]:
 def test3() -> list[bool, Exception | None]:
     # test the prebuilt functions
     try:
-        assistant = StreamlinedGPT.assistant("your a helpful assistant", "gpt-4o-mini")
+        assistant = text.assistant("your a helpful assistant", "gpt-4o-mini")
         assistant.addTool(prebuiltTools().runPythonCode)
         assistant.addUserMessageToHistory("calculate the 3rd fibbonaci number with code")
         assistant.getAiResponse()
@@ -76,7 +76,7 @@ def test3() -> list[bool, Exception | None]:
 def test4() -> list[bool, Exception | None]:
     # test behaviour when multiple tools are called
     try:
-        assistant = StreamlinedGPT.assistant("your a helpful assistant", "gpt-4o-mini")
+        assistant = text.assistant("your a helpful assistant", "gpt-4o-mini")
         class response:
             def __init__(self):
                 self.message = {"tool_calls": [{"id": "tool_call_1"},{"id": "tool_call_1"},{"id": "tool_call_1"},{"id": "tool_call_1"},{"id": "tool_call_1"}]}
@@ -91,13 +91,13 @@ def test5() -> list[bool, Exception | None]:
     try:
         def sumnumber(numList):
             return sum(numList)
-        assistant = StreamlinedGPT.assistant("you are a helpful asssistant", "gpt-4o-mini")
-        assistant.addTool(StreamlinedGPT.tool(
+        assistant = text.assistant("you are a helpful asssistant", "gpt-4o-mini")
+        assistant.addTool(text.tool(
             name="sum",
             description="sums a list of numbers",
             function=sumnumber,
             arguments=[
-                StreamlinedGPT.tool.argument("numList", "array", "number that will be summed", listType="number")
+                text.tool.argument("numList", "array", "number that will be summed", listType="number")
             ]
         ))
         assistant.addUserMessageToHistory("can you sum 5478932 8974 45982 5237849 using your built in function")
@@ -109,7 +109,7 @@ def test5() -> list[bool, Exception | None]:
 @runTest
 def test6() -> list[bool, Exception | None]:
     try:
-        StreamlinedGPT.getResponse("hello", "gpt-4o-mini")
+        text.getResponse("hello", "gpt-4o-mini")
         return [True]
     except Exception as e:
         return [False, e]

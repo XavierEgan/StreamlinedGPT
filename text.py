@@ -7,7 +7,7 @@ except:
     from .secrets.OpenAiKey import key
     client = OpenAI(api_key=key)
 
-class StreamlinedGPT:
+class text:
     class tool:
         def  __init__(self, function, name : str, description : str, arguments : list):
             self.function = function

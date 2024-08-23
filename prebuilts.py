@@ -1,13 +1,13 @@
-from .Library import StreamlinedGPT
+from .text import text
 
 class prebuiltTools:
     def __init__(self):
-        self.runPythonCode = StreamlinedGPT.tool(
+        self.runPythonCode = text.tool(
             function=self._execute,
             name="execute",
             description="execute python code. Returns a dictionary of every variable in the code. In order to get information out, set a global variable which will be returned",
             arguments=[
-                StreamlinedGPT.tool.argument("code", "string", "the code that is ran")
+                text.tool.argument("code", "string", "the code that is ran")
             ]
         )
 
@@ -29,7 +29,7 @@ class prebuiltTools:
         return returnDict
     
     def autoPrompt(promptList):
-        tempAssistant = StreamlinedGPT.assistant("You are a helpfull assistant. for anything relating to math, counting, problems etc, use the code editor when appropriate.", "gpt-4o-mini")
+        tempAssistant = text.assistant("You are a helpfull assistant. for anything relating to math, counting, problems etc, use the code editor when appropriate.", "gpt-4o-mini")
         tempAssistant.addTool(prebuiltTools().runPythonCode)
         for prompt in promptList:
             # print(StreamlinedGPT.getResponse(f"write the following prompt, but write the action that is taking place. For example if the prompt was count the instances of the letter r, the output should be 'counting r's' {prompt}", "gpt-4o-mini"))
