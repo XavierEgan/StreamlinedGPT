@@ -44,7 +44,7 @@ class text:
     
 
     class assistant:
-        def __init__(self, systemMessage : str, model : str, maxToolCall : int = 5):
+        def __init__(self, systemMessage : str, model : str, maxToolCall : int = 1):
             self.systemMessage = systemMessage
             self.model = model
             self.tools = []
