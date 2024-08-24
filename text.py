@@ -102,7 +102,7 @@ class text:
             if len(self.toolLog) == 0:
                 aiResponse = self._getAiResponse(tools=False)
             else:
-                if self.toolCallCount >= self.maxFunctionCalls:
+                if self.toolCallCount > self.maxFunctionCalls:
                     aiResponse = self._getAiResponse(tools=False)
                 else:
                     aiResponse = self._getAiResponse()
@@ -150,6 +150,7 @@ class text:
                 try:
                     toolResponse = self.toolLog[toolCall.name](**json.loads(toolCall.arguments))
                 except Exception as e:
+                    print(f"tool had following error: {e}")
                     toolResponse = f"the following error occured: {e}"
                 
                 self._addToolResponseToHistory(aiResponse, toolResponse, call)
