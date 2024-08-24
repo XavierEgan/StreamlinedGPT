@@ -110,11 +110,14 @@ class text:
             self._addAiResponseToHistory(aiResponse)
 
             if aiResponse.finish_reason in ["stop", "length", "content_filter"]:
+                self.toolCallCount = 0
                 return(aiResponse.message.content)
 
             elif aiResponse.finish_reason == "tool_calls":
                 self._manageTool(aiResponse)
-                return self.getAiResponse()
+                response = self.getAiResponse()
+                self.toolCallCount = 0
+                return response
             
             else:
                 print("ai's stop reason was unexpected (probably a function call)")
