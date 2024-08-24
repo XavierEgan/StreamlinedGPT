@@ -7,7 +7,7 @@ class prebuiltTools:
             name="execute",
             description="execute python code. Returns a dictionary of every variable in the code. In order to get information out, set a global variable which will be returned",
             arguments=[
-                text.tool.argument("code", "string", "the code that is ran")
+                text.tool.argument(name="code", type="string", description="the code that is ran")
             ]
         )
         self.autoPrompt = text.tool(
