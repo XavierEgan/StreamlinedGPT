@@ -6,8 +6,6 @@ import scipy.io.wavfile as wavfile
 import time
 import keyboard
 from pathlib import Path
-import ffmpeg
-
 
 try:
     client = OpenAI()
