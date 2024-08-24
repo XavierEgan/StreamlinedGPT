@@ -124,6 +124,7 @@ class audio:
                         exponent = len(str(number)) -1
                         mantissa = int(str(number)[0:5])/(10**4)
                         outputString += f"{num2words.num2words(mantissa)} times ten to the power of {num2words.num2words(exponent)}"
+            outputString += text[numberLocationList[-1][1]:-1]
                     
 
             return(outputString)
