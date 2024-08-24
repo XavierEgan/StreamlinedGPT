@@ -5,9 +5,10 @@ class prebuiltTools:
         self.runPythonCode = text.tool(
             function=self._execute,
             name="execute",
-            description="execute python code. Returns a dictionary of every variable in the code. In order to get information out, set a global variable which will be returned",
+            description="execute python code. Returns a dictionary of every variable in the code. In order to get information out, set a global variable which will be returned. DONT TRY 'return(func(args)) IT WILL RETURN NOTHING. YOU MUST SET THE OUTPUT TO A VARIABLE",
             arguments=[
-                text.tool.argument(name="code", type="string", description="the code that is ran")
+                text.tool.argument(name="code", type="string", description="the code that is ran"),
+                text.tool.argument(name="extreemlyLarge", type="boolean", description="Flag that controls if there is going to be an extreemly large number. If the flag is on it will set the set_int_max_str_digits to 1 million to allow for extreemly large numbers. You may need to use this if the user asks for example, the 10000th fibonaci number.", isRequired=False)
             ]
         )
         self.autoPrompt = text.tool(
@@ -18,7 +19,10 @@ class prebuiltTools:
                 text.tool.argument(name="promptList", description="the array containing the prompts that will be excecuted", type="array")
             ])
 
-    def _execute(self, code):
+    def _execute(self, code, extreemlyLarge : bool = False):
+        if extreemlyLarge:
+            import sys
+            sys.set_int_max_str_digits(1000000)
         localDict = {}
 
         try:

@@ -6,7 +6,8 @@ import scipy.io.wavfile as wavfile
 import time
 import keyboard
 from pathlib import Path
-import inflect
+import num2words
+import sys
 
 try:
     client = OpenAI()
@@ -71,6 +72,14 @@ class audio:
         self.playAudio(interruptKey)
     
     def convertNumbersToWords(self, text : str):
+        # remove all commas seperating numbers
+        for i in range(len(text)):
+            if i >= len(text):
+                break
+            elif text[i] == "," and text[i-1].isdigit() and text[i+1].isdigit:
+                text = text[:i] + text[i+1:]
+
+
         # list that will contain a list of the two pointers denoting where a number is
         numberLocationList = []
 
@@ -94,15 +103,29 @@ class audio:
             pointer1=pointer2+1
         
         outputString = ""
-        infl = inflect.engine()
         if not len(numberLocationList) == 0:
             for i in range(len(numberLocationList)):
                 if i==0:
                     outputString += text[0:numberLocationList[0][0]]
-                    outputString += infl.number_to_words(text[numberLocationList[0][0]:numberLocationList[0][1]])
+                    if int(text[numberLocationList[0][0]:numberLocationList[0][1]]) < 1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000:
+                        outputString += num2words.num2words(text[numberLocationList[0][0]:numberLocationList[0][1]])
+                    else:
+                        number = int(text[numberLocationList[0][0]:numberLocationList[0][1]])
+                        exponent = len(str(number)) -1
+                        mantissa = int(str(number)[0:5])/(10**4)
+                        outputString += f"{num2words.num2words(mantissa)} times ten to the power of {num2words.num2words(exponent)}"
+                        
                 else:
                     outputString += text[numberLocationList[i-1][1]:numberLocationList[i][0]]
-                    outputString += infl.number_to_words(text[numberLocationList[i][0]:numberLocationList[i][1]])
+                    if int(text[numberLocationList[i][0]:numberLocationList[i][1]]) < 1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000:
+                        outputString += num2words.num2words(text[numberLocationList[i][0]:numberLocationList[i][1]])
+                    else:
+                        number = int(text[numberLocationList[i][0]:numberLocationList[i][1]])
+                        exponent = len(str(number)) -1
+                        mantissa = int(str(number)[0:5])/(10**4)
+                        outputString += f"{num2words.num2words(mantissa)} times ten to the power of {num2words.num2words(exponent)}"
+                    
+
             return(outputString)
         else:
             return(text)
