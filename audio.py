@@ -6,6 +6,7 @@ import scipy.io.wavfile as wavfile
 import time
 import keyboard
 from pathlib import Path
+import inflect
 
 try:
     client = OpenAI()
@@ -57,13 +58,51 @@ class audio:
         )
         return(transcription.text)
     
-    def textToSpeech(self, text, interruptKey = None):
+    def textToSpeech(self, text,  interruptKey = None, voice = "alloy", speed = 1, model = "tts-1"):
         response = client.audio.speech.create(
-            model="tts-1",
-            voice="alloy",
+            model=f"{model}",
+            voice=f"{voice}",
             input=f"{text}",
+            speed=speed,
             response_format="wav"
         )
         response.stream_to_file(self.workingFilePath)
 
         self.playAudio(interruptKey)
+    
+    def convertNumbersToWords(self, text : str):
+        # list that will contain a list of the two pointers denoting where a number is
+        numberLocationList = []
+
+        pointer1 = 0
+        pointer2 = 0
+
+        while pointer1 < len(text):
+            if not text[pointer1].isdigit():
+                pointer1+=1
+                continue
+            pointer2 = pointer1
+            while pointer2 <= len(text):
+                if pointer2 == len(text)-1:
+                    numberLocationList.append([pointer1,pointer2+1])
+                    break
+                elif text[pointer2].isdigit():
+                    pointer2+=1
+                    continue
+                numberLocationList.append([pointer1,pointer2])
+                break
+            pointer1=pointer2+1
+        
+        outputString = ""
+        infl = inflect.engine()
+        if not len(numberLocationList) == 0:
+            for i in range(len(numberLocationList)):
+                if i==0:
+                    outputString += text[0:numberLocationList[0][0]]
+                    outputString += infl.number_to_words(text[numberLocationList[0][0]:numberLocationList[0][1]])
+                else:
+                    outputString += text[numberLocationList[i-1][1]:numberLocationList[i][0]]
+                    outputString += infl.number_to_words(text[numberLocationList[i][0]:numberLocationList[i][1]])
+            return(outputString)
+        else:
+            return(text)

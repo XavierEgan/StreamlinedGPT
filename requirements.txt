@@ -5,3 +5,4 @@ scipy==1.14.1
 keyboard==0.13.5
 pathlib==1.0.1
 ffmpeg==1.4
+inflect==7.3.1
