@@ -39,11 +39,11 @@ class prebuiltTools:
 
         return returnDict
     
-    def _autoPrompt(promptList):
+    def _autoPrompt(self, promptList):
         tempAssistant = text.assistant("You are a helpfull assistant. for anything relating to math, counting, problems etc, use the code editor when appropriate.", "gpt-4o-mini")
         tempAssistant.addTool(prebuiltTools().runPythonCode)
         for prompt in promptList:
-            # print(StreamlinedGPT.getResponse(f"write the following prompt, but write the action that is taking place. For example if the prompt was count the instances of the letter r, the output should be 'counting r's' {prompt}", "gpt-4o-mini"))
+            print(text.getResponse(f"write the following prompt, but write the action that is taking place. For example if the prompt was count the instances of the letter r, the output should be 'counting r's'. This should not exceed 10 words. {prompt}", "gpt-4o-mini"))
             tempAssistant.addUserMessageToHistory(prompt)
             tempAssistant.getAiResponse()
         tempAssistant.addUserMessageToHistory("recap the reasoning you just went to and give a final answer")
