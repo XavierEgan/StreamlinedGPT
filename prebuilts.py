@@ -28,7 +28,8 @@ class prebuiltTools:
         try:
             exec(code, None, localDict)
         except Exception as e:
-            return f"code had an error: {e}"
+            print(f"The code your assistant ran had the following error: {e}")
+            return f"The code you ran had an error. Inform the user of the following error: {e}"
         
         returnDict = {}
 
@@ -43,7 +44,7 @@ class prebuiltTools:
         tempAssistant = text.assistant("You are a helpfull assistant. for anything relating to math, counting, problems etc, use the code editor when appropriate.", "gpt-4o-mini")
         tempAssistant.addTool(prebuiltTools().runPythonCode)
         for prompt in promptList:
-            print(text.getResponse(f"write the following prompt, but write the action that is taking place. For example if the prompt was count the instances of the letter r, the output should be 'counting r's'. This should not exceed 10 words. {prompt}", "gpt-4o-mini"))
+            print(text.getResponse(f"rewrite the following prompt as an action in 5 words or less: <prompt>{prompt}<prompt>", "gpt-4o-mini"))
             tempAssistant.addUserMessageToHistory(prompt)
             tempAssistant.getAiResponse()
         tempAssistant.addUserMessageToHistory("recap the reasoning you just went to and give a final answer")

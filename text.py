@@ -98,6 +98,12 @@ class text:
                 "content": f"{message}"
             })
 
+        def addSystemMessageToHistory(self, message : str):
+            self.messageHistory.append({
+                "role": f"user",
+                "content": f"{message}"
+            })
+
         def getAiResponse(self):
             if len(self.toolLog) == 0:
                 aiResponse = self._getAiResponse(tools=False)
@@ -153,7 +159,7 @@ class text:
                 try:
                     toolResponse = self.toolLog[toolCall.name](**json.loads(toolCall.arguments))
                 except Exception as e:
-                    print(f"tool had following error: {e}")
+                    print(f"\033[31m\033[1mtool had following error: {e}\033[0m")
                     toolResponse = f"the following error occured: {e}"
                 
                 self._addToolResponseToHistory(aiResponse, toolResponse, call)

@@ -1,3 +1,4 @@
+import elevenlabs.client
 from openai import OpenAI
 import json
 import sounddevice as sd
@@ -8,6 +9,7 @@ import keyboard
 from pathlib import Path
 import num2words
 import sys
+import wave
 
 try:
     client = OpenAI()
@@ -49,6 +51,44 @@ class audio:
         samplerate, audio_data = wavfile.read(self.workingFilePath)
         sd.play(audio_data, samplerate)
         sd.wait()
+
+    def textToSpeech11Labs(self, text, stop_button):
+        import elevenlabs
+        from elevenlabs.client import ElevenLabs
+        from elevenlabs import VoiceSettings
+        from .secrets.elabs import key
+
+        client = ElevenLabs(api_key=key)
+
+        response = client.text_to_speech.convert(
+            voice_id="pNInz6obpgDQGcFmaJgB",  # Adam pre-made voice
+            optimize_streaming_latency="0",
+            output_format="pcm_16000",
+            text=text,
+            model_id="eleven_turbo_v2",
+            voice_settings=VoiceSettings(
+                stability=0.0,
+                similarity_boost=1.0,
+                style=0.0,
+                use_speaker_boost=True,
+            ),
+        )
+
+        # Save the audio to the working file path as a WAV file
+        with wave.open(self.workingFilePath, "wb") as wav_file:
+            wav_file.setnchannels(1)
+            wav_file.setsampwidth(2)
+            wav_file.setframerate(16000)
+            
+            # Collect all chunks into a single bytes object
+            audio_data = b''.join(chunk for chunk in response if chunk)
+            
+            # Write the audio data to the WAV file
+            wav_file.writeframes(audio_data)
+        
+
+        self.playAudio(stop_button)
+
     
     def speechToText(self, recordKey) -> str:
         self.recordAudio(recordKey)
