@@ -1,0 +1,15 @@
+this is to describe my ideas for the restructure
+
+structured like this:
+-text
+--adaptor
+--tool
+--tool_argument
+--openai
+--claude
+-audio
+--adaptor
+--openai
+--elevenlabs
+
+the following is much more maintainable than my currently strategy of spewing everything into the same directory. It also add much more features (being able to interact with multiple types apis) while not complicating the api

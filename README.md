@@ -1,3 +1,5 @@
+### THIS IS THE RESTRUCTURE BRANCH AND MOST OF THE FOLLOWING WILL BE INCORRECT
+
 # StreamlinedGPT
 StreamlinedGPT is a custom OpenAI Library that allows for easy interaction with the OpenAI API and management of tools. It sacrifices functionality for ease of use and maintainability.
 
