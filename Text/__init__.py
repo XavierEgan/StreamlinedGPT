@@ -1,2 +1,2 @@
 import Tool
-import Argument
+import Text.Argument as Argument

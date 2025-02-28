@@ -1,4 +1,4 @@
-from Tool_Call import Tool_Call
+from Text.Helper_Classes.Tool_Call import Tool_Call
 
 class Message:
     def __init__(self, content: str, role: str, tool_calls: list[Tool_Call]):

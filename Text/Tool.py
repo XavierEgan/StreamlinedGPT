@@ -1,4 +1,4 @@
-from Argument import Argument
+from Text.Argument import Argument
 
 class Tool:
     def  __init__(self, function: callable, name: str, description: str, arguments: list[Argument]):
@@ -8,6 +8,7 @@ class Tool:
         self.arguments = arguments
     
     def get_tool_string(self) -> str:
+        # TODO: this was made for openai, so i should get rid of this and move it to the openai adaptor.
         # extract the arguments
         arguments = {}
         for argument in self.arguments:
