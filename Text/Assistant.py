@@ -8,19 +8,26 @@ class Assistant:
     def __init__(self, adaptor: Adaptor):
         self.message_history: list[Message] = []
         self.tools: list[Tool] = []
-        self.tool_log: list[callable] = []
+        self.tool_log: list[str : callable] = {}
 
         self.adaptor: Adaptor = adaptor
     
     def send_message(self, message: str, model: str | None = None, tool_choice: Literal["none", "auto", "required"] = "auto") -> Message:
         """
-        Returns the Message object
-        message: the message to send to the model
-        model: the llm model used. None means use the default model
+        Returns a Message object. Message.content to retrieve what the model said\n
+        message: the message to send to the model\n
+        model: the llm model used. None means use the default model\n
         tool_choice: str 'none', 'auto' or 'required'
         """
+        self.message_history.append(
+            Message(
+                content=message,
+                role="user"
+            )
+        )
+
         kwargs = {
-            "message" : message,
+            "message_history" : self.message_history,
             "model" : model,
             "tools" : self.tools,
             "tool_choice" : tool_choice
@@ -33,15 +40,24 @@ class Assistant:
 
         self.message_history.append(response)
 
-        self._manage_tool
+        if len(response.tool_calls) == 0:
+            return response
+
+        self._manage_tool(response)
+
+        kwargs["message_history"] == self.message_history
+        kwargs["tool_choice"] == "none"
+
+        response = self.adaptor.get_completion_with_history(**kwargs)
 
         return response
 
     
-    def send_message_without_history(self, message: str, model: str | None = None, tool_choice: Literal["none", "auto", "required"] = "auto"):
+    def send_message_without_history(self, message: str, model: str | None = None, tool_choice: Literal["none", "auto", "required"] = "auto") -> Message:
         """
-        message: the message to send to the model
-        model: the llm model used. None means use the default model
+        Returns a Message object. Message.content to retrieve what the model said\n
+        message: the message to send to the model\n
+        model: the llm model used. None means use the default model\n
         tool_choice: str 'none', 'auto' or 'required'
         """
         kwargs = {
@@ -57,6 +73,9 @@ class Assistant:
 
         response = self.adaptor.get_completion(**kwargs)
 
+        if len(response.tool_calls) == 0:
+            return response
+
         message_history = [response] + self._manage_tool_no_history(response)
 
         response = self.adaptor.get_completion
@@ -65,7 +84,7 @@ class Assistant:
 
     def _manage_tool(self, message: Message) -> None:
         if len(message.tool_calls) == 0:
-            return # there were no tool calls
+            raise ValueError("This function should only be called if there are tool calls")
         
         for tool_call in message.tool_calls:
             try:
@@ -84,8 +103,12 @@ class Assistant:
             )
     
     def _manage_tool_no_history(self, message: Message) -> list[Message]:
+        """
+        returns a list of responsese from the tools\n
+        the list is usually len()=1 because there is usually only 1 tool call
+        """
         if len(message.tool_calls) == 0:
-            return # there were no tool calls
+            raise ValueError("This function should only be called if there are tool calls")
         
         messages = []
 

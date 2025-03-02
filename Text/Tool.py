@@ -27,7 +27,7 @@ class Tool:
                 }
         
         # build the tool description for the ai
-        toolString = {
+        tool_string = {
             "type" : "function",
             "function" : {
                 "name" : self.name,
@@ -40,3 +40,4 @@ class Tool:
                 }
             }
         }
+        return tool_string

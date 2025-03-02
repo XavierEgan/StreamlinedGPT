@@ -19,7 +19,10 @@ class Openai_Adaptor(Adaptor):
         for message in message_history:
             message_dict = {}
             message_dict["role"] = message.role
-            message_dict["content"] = message.content
+            message_dict["content"] = message.content if not message.content == None else ""
+
+            if message.role == "tool":
+                message_dict["tool_call_id"] = message.tool_call_id
 
             tool_calls = []
             if len(message.tool_calls) > 0:
@@ -33,7 +36,8 @@ class Openai_Adaptor(Adaptor):
                     }
                     tool_calls.append(tool_call_dict)
             
-            message_dict["tool_calls"] = tool_calls
+                message_dict["tool_calls"] = tool_calls
+            messages.append(message_dict)
 
         reasoning_effort = None # this handles different reasoning efforts by treating them as different models
         if model.endswith("high"):
@@ -64,10 +68,10 @@ class Openai_Adaptor(Adaptor):
         if not completion.choices[0].message.tool_calls == None:
             for x in completion.choices[0].message.tool_calls:
                 tool_calls.append(Tool_Call(
-                    id = x["id"], 
-                    name = x["function"]["name"], 
-                    type = x["type"], 
-                    arguments=x["function"]["arguments"]))
+                    id = x.id, 
+                    name = x.function.name, 
+                    type = x.type, 
+                    arguments=x.function.arguments))
 
         return Message(
             content = completion.choices[0].message.content,
