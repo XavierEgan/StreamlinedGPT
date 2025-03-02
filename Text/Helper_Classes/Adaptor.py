@@ -1,5 +1,5 @@
-from Tool import Tool
-from Text.Helper_Classes.Message import Message
+from ..Tool import Tool
+from .Message import Message
 import json
 from typing import Literal
 
@@ -10,5 +10,5 @@ class Adaptor:
     def get_completion_with_history(self, message_history: list[Message], model: str, tools: list[Tool], tool_choice: Literal["none", "auto", "required"] = "auto") -> Message:
         pass
 
-    def get_completion(self, message: Message, model: str, tools: list[Tool]) -> Message:
+    def get_completion(self, message: str | None, model: str, tools: list[Tool] = [], tool_choice: Literal["none", "auto", "required"] = "auto") -> Message:
         pass

@@ -1,4 +1,4 @@
-from Text.Argument import Argument
+from .Argument import Argument
 
 class Tool:
     def  __init__(self, function: callable, name: str, description: str, arguments: list[Argument]):
