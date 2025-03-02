@@ -12,3 +12,6 @@ class Adaptor:
 
     def get_completion(self, message: str | None, model: str, tools: list[Tool] = [], tool_choice: Literal["none", "auto", "required"] = "auto") -> Message:
         pass
+
+    def _get_tool_string(self, tool: Tool) -> str:
+        pass

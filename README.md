@@ -1,5 +1,3 @@
-### THIS IS THE RESTRUCTURE BRANCH AND MOST OF THE FOLLOWING WILL BE INCORRECT
-
 # StreamlinedGPT
 StreamlinedGPT is a custom OpenAI Library that allows for easy interaction with the OpenAI API and management of tools. It sacrifices functionality for ease of use and maintainability.
 
@@ -48,7 +46,7 @@ extract the zip in the same folder as where you want to code
 copy the full path to the `requirements.txt` file and run the following command in a terminal `pip install -r "/path/to/your/project/requirements.txt"`
 
 ### Step 7: Import the library
-in python type `from StreamlinedGPT.text import text`. This will give you the text class, which is explained below.
+in python type `import StreamlinedGPT`. This will give you the text class, which is explained below.
 
 
 below is a simple example showing how the library is intended too be used. It defines "calculator" and then builds a tool the Ai can use.
