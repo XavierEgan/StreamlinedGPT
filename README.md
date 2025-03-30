@@ -46,7 +46,7 @@ extract the zip in the same folder as where you want to code
 ### Step 6: Download requirements
 copy the full path to the `requirements.txt` file and run the following command in a terminal `pip install -r "/path/to/your/project/requirements.txt"`
 
-## Quick Start
+## Very Quick Start
 The below code gives a simple example of how the library can be used
 ```python
 import StreamlinedGPT
