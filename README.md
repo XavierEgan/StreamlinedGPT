@@ -1,5 +1,57 @@
 # StreamlinedGPT
-A lightweight wrapper that simplifies AI model interactions, offering unified access to leading LLMs with minimal code. 
+StreamlinedGPT is a Python library designed to simplify interactions with leading AI models. It provides a unified interface to seamlessly integrate and experiment with various models, removing the complexity of dealing with multiple APIs. The library also streamlines the process of granting AI access to tools, empowering users to leverage AI capabilities in a more dynamic and intuitive way, without the need to handle verbose syntax or repetitive boilerplate code.
+
+Whether you're an individual innovator or an enterprise team, StreamlinedGPT is the perfect solution for experimenting with AI models, tooling workflows, and custom prompts. Its design prioritizes ease of use, aiding rapid prototyping and fostering creativity. By reducing development friction, it enables users to focus on building meaningful applications rather than wrestling with technical details.
+
+## Why use StreamlinedGPT?
+StreamlinedGPT is designed to simplify the syntax of existing solutions, like OpenAI's Python library, enabling rapid prototyping of tools, prompts, and experiments.
+
+It addresses the lack of an easy, quick way to experiment with model tooling by eliminating boilerplate code and reducing complexity.
+
+Below is a comparison of StreamlinedGPT and OpenAI's library.
+
+<table>
+  <thead>
+    <tr>
+      <th>StreamlinedGPT</th>
+      <th>Equivalent code with Openai</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><pre><code>import StreamlinedGPT<br>
+chatbot = StreamlinedGPT.Assistant(
+&nbsp;&nbsp;&nbsp;&nbsp;StreamlinedGPT.Openai_Text_Adaptor()
+)<br>
+chatbot.chatloop()</code></pre></td>
+      <td><pre><code>from openai import OpenAI
+client = OpenAI()<br>
+message_history = []<br>
+while True:
+&nbsp;&nbsp;&nbsp;&nbsp;user_input = input(&quot;\033[94mUSER &gt; \033[0m&quot;)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if user_input == &quot;exit&quot;:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break<br>
+&nbsp;&nbsp;&nbsp;&nbsp;message_history.append(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;role&quot;: &quot;user&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;content&quot;: user_input
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;response = client.responses.create(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model=&quot;gpt-4o-mini&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input = message_history
+&nbsp;&nbsp;&nbsp;&nbsp;)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;message_history.append(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;role&quot;: &quot;assistant&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;content&quot;: response.output_text
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print(f&quot;\033[92mASSISTANT &gt; \033[0m{response.output_text}&quot;)</code></pre></td>
+    </tr>
+  </tbody>
+</table>
+
 
 ## Quick Start
 skip to step 5 if you already have your API key set as a system variable
