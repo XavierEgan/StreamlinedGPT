@@ -1,4 +1,4 @@
-from .Helper_Classes.Adaptor import Adaptor
+from .Helper_Classes.Text_Adaptor import Text_Adaptor
 from .Helper_Classes.Message import Message
 from .Helper_Classes.Tool_Call import Tool_Call
 from .Tool import Tool
@@ -8,7 +8,7 @@ from openai import OpenAI
 # https://platform.openai.com/docs/api-reference/chat/create?lang=python
 
 # there is a lot of duplicate code in here which i should make helper functions for.
-class Openai_Adaptor(Adaptor):
+class Openai_Text_Adaptor(Text_Adaptor):
     def __init__(self):
         super().__init__()
 

@@ -3,7 +3,7 @@ from .Message import Message
 import json
 from typing import Literal
 
-class Adaptor:
+class Text_Adaptor:
     def __init__(self):
         pass
 

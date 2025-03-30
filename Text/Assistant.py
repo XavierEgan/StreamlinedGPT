@@ -1,16 +1,16 @@
 from .Tool import Tool
 from .Helper_Classes.Message import Message
-from .Helper_Classes.Adaptor import Adaptor
+from .Helper_Classes.Text_Adaptor import Text_Adaptor
 from typing import Literal
 import json
 
 class Assistant:
-    def __init__(self, adaptor: Adaptor):
+    def __init__(self, adaptor: Text_Adaptor):
         self.message_history: list[Message] = []
         self.tools: list[Tool] = []
         self.tool_log: list[str : callable] = {}
 
-        self.adaptor: Adaptor = adaptor
+        self.adaptor: Text_Adaptor = adaptor
     
     def send_message(self, message: str, model: str | None = None, tool_choice: Literal["none", "auto", "required"] = "auto") -> Message:
         """
