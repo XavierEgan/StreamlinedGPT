@@ -1,5 +1,5 @@
 # StreamlinedGPT
-StreamlinedGPT is a custom OpenAI Library that allows for easy interaction with the OpenAI API and management of tools. It sacrifices functionality for ease of use and maintainability.
+A lightweight wrapper that simplifies AI model interactions, offering unified access to leading LLMs with minimal code. 
 
 ## Quick Start
 skip to step 5 if you already have your API key set as a system variable
@@ -29,10 +29,11 @@ key = "uh78g40w8g4hwbg0ui456h8u0yg2h08g2456082345"
 make sure you dont accidentally push your key.
 
 ### Option 2: Set system variable
-press the windows key and type "system var", then press `Edit the system environment variables`
-press `advanced` in the top menu
-press `Environment Variables...`
-press `New...` that is below the top box
+press the windows key and type "system var"\
+press `Edit the system environment variables`\
+press `advanced` in the top menu\
+press `Environment Variables...`\
+press `New...` that is below the top box\
 name it `OPENAI_API_KEY` and make its value your api key
 the library should now work
 
@@ -45,117 +46,96 @@ extract the zip in the same folder as where you want to code
 ### Step 6: Download requirements
 copy the full path to the `requirements.txt` file and run the following command in a terminal `pip install -r "/path/to/your/project/requirements.txt"`
 
-### Step 7: Import the library
-in python type `import StreamlinedGPT`. This will give you the text class, which is explained below.
-
-
-below is a simple example showing how the library is intended too be used. It defines "calculator" and then builds a tool the Ai can use.
+## Quick Start
+The below code gives a simple example of how the library can be used
 ```python
-from StreamlinedGPT.text import text
+import StreamlinedGPT
 
-# create a function/tool the AI will have access to
-def calculator(expression: str):
-    try:
-        return eval(expression)
-    except Exception as e:
-        return f"error: {e}"
+chatbot = StreamlinedGPT.Assistant(
+    StreamlinedGPT.Openai_Text_Adaptor()
+)
 
-# create an assistant with a system message and model (full list of models can be found on OpenAI's website)
-assistant = text.assistant(systemMessage="you are a helpfull assistant", model="gpt-4o-mini")
-
-# add a tool
-assistant.addTool(text.tool(
-    function=calculator, 
-    name="calculator", 
-    description="give a string and the function will evaluate it",
-    arguments=[
-        text.tool.argument(name="expression", type="string", description="the expression that is evaluated")
-    ]
-))
-
-# start a chatloop with the user in the comand line
-assistant.chatLoopCLI()
+chatbot.chatloop()
 ```
-below is another example using one of the prebuilt tools
+The `Assistant` class takes in an `Adaptor`. In this example the `Openai_Text_Adaptor` was used. Currently the library only has an openai adaptor, however this will be expanded in the future.
+
+Tool use is quite simple with StreamlinedGPT. A tool is a python function that the ai model can call. Below is an example
 ```python
-from StreamlinedGPT.text import text
-from StreamlinedGPT.prebuilts import prebuiltTools
+import StreamlinedGPT
 
-assistant = text.assistant("you are a helpful assistant", "gpt-4o-mini")
-assistant.addTool(prebuiltTools().runPythonCode)
+chatbot = StreamlinedGPT.Assistant(
+    StreamlinedGPT.Openai_Text_Adaptor()
+)
 
-assistant.chatLoopCLI()
+def print_to_console(s):
+    print(s)
+
+chatbot.add_tool(
+    tool=StreamlinedGPT.Tool(
+        function=print_to_console,
+        name="print_to_console",
+        description="prints something to the console",
+        arguments=[
+            StreamlinedGPT.Argument(
+                name="s", 
+                type="string", 
+                description="the string to print"
+            )
+        ]
+    )
+)
+
+chatbot.chatloop()
 ```
+A tool is defined by making an instance of the `Tool` class, and passing it into the `add_tool` method of an `Assistant`. 
+
 ## Documentation
-### class `text`
-this class houses the methods and classes associated with text. It handles creating an assistant, getting responses from them and handling tools.
-#### method `getResponse(message : str, model : str)`
-simply gets a response from the model.
-#### class `tool(function : str, name : str, description : str, arguments : list)`
-represents a tool the model can access. arguments should be a list of text.tool.argument(s)\
-example
-```python
-runPythonCode = text.tool(
-    function=execute,
-    name="execute",
-    description="execute python code. Returns a dictionary of every variable in the code.",
-    arguments=[
-        text.tool.argument("code", "string", "the code that is ran")
-    ]
-) 
-```
+### class `Argument`
+A class that represents an argument for a tool.
+#### constructor
+| Argument    | Type                                            | Description                                                                                 |
+| ----------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| name        | str                                             | The name of the argument                                                                    |
+| type        | Literal["array", "string", "number", "boolean"] | The data type of the argument                                                               |
+| description | str                                             | The description of the argument that is given to the model                                  |
+| is_required | bool                                            | Indicates whether the argument is required. Defaults to `True`                              |
+| list_type   | str                                             | The type of data the array should contain if the argument is an array. Defaults to "string" |
 
-##### class `argument(name : str, type : str, description : str, isRequired : bool)
-represents an argument for a tool. Pass into the `arguments` argument of the text.tool\
-example
-```python
-text.tool.argument("code", "string", "the code that is ran")
-```
+### class `Assistant`
+A class that provides methods for having chat-like conversations with AI models.
+#### constructor
+| Argument | Type         | Description                                            |
+| -------- | ------------ | ------------------------------------------------------ |
+| adaptor  | Text_Adaptor | The text adaptor used to communicate with the AI model |
 
-#### class `assistant(systemMessage : str, model : str)`
-Create an object that enables chatting with the AI and includes conversation history.
-##### method `addTool(tool)`
-tool should be an instance of the tool class. It gives the assistant access to that tool
+#### method `send_message`
+| Argument    | Type                                | Description                                                |
+| ----------- | ----------------------------------- | ---------------------------------------------------------- |
+| message     | str                                 | The message to send to the model                           |
+| model       | str \| None                         | The LLM model to use. If `None`, the default model is used |
+| tool_choice | Literal["none", "auto", "required"] | Controls the model's tool use behavior. Defaults to "auto" |
 
-##### method `addUserMessageToHistory(message : str)`
-adds the user message to the chat history. Do this before calling "getAiResponse"
+#### method `send_message_without_history`
+| Argument    | Type                                | Description                                                |
+| ----------- | ----------------------------------- | ---------------------------------------------------------- |
+| message     | str                                 | The message to send to the model                           |
+| model       | str \| None                         | The LLM model to use. If `None`, the default model is used |
+| tool_choice | Literal["none", "auto", "required"] | Controls the model's tool use behavior. Defaults to "auto" |
 
-##### method `getAiResponse()`
-returns the response from AI, does not take in any parameters because it looks at the message history (of the assistant it is being called from).
+#### method `add_tool`
+| Argument | Type | Description                      |
+| -------- | ---- | -------------------------------- |
+| tool     | Tool | The tool to add to the assistant |
 
-##### method `chatLoopCLI()`
-starts a loop in the command line where the user is prompted to input a message, then the assistant responds.
-(from quickstart 2)
-![image](https://github.com/user-attachments/assets/755c4d20-909a-4efd-953e-087a7951e893)
+#### method `chatloop`
+Starts an interactive chat loop in the console.
 
-### class `prebuiltTools`
-Class that contains some prebuilt tools that you can use.
-
-## Examples:
-### Voice Assistant
-```python
-from StreamlinedGPT.text import text
-from StreamlinedGPT.prebuilts import prebuiltTools
-from StreamlinedGPT.audio import audio
-
-audioObj = audio(r"your path here")
-
-assistant = text.assistant("you are a helpfull voice assistant. Try keep responses relativally short and to the point.", "gpt-4o-mini")
-assistant.addTool(prebuiltTools().runPythonCode)
-
-while True:
-    userInputText = audioObj.speechToText("f17")
-    assistant.addUserMessageToHistory(userInputText)
-    response = assistant.getAiResponse()
-    audioObj.textToSpeech(response, "f16")
-```
-### console assistant
-```python
-from StreamlinedGPT.text import text
-from StreamlinedGPT.prebuilts import prebuiltTools
-
-assistant = text.assistant("you are a helpful assistant", "gpt-4o-mini")
-assistant.addTool(prebuiltTools().runPythonCode)
-assistant.addTool(prebuiltTools().autoPrompt)
-assistant.chatLoopCLI()
-```
+### class `Tool`
+A class that represents a tool that can be used by the AI model.
+#### constructor
+| Argument    | Type           | Description                                            |
+| ----------- | -------------- | ------------------------------------------------------ |
+| function    | callable       | The function to be executed when the tool is called    |
+| name        | str            | The name of the tool                                   |
+| description | str            | The description of the tool that is given to the model |
+| arguments   | list[Argument] | A list of arguments that the tool function accepts     |
