@@ -133,3 +133,12 @@ class Assistant:
         self.tool_log[tool.name] = tool.function
 
         self.tools.append(tool)
+
+    def chatloop(self):
+        while True:
+            user_input = input("\033[94mUSER > \033[0m")
+            if user_input == "exit":
+                break
+
+            response = self.send_message(user_input)
+            print(f"\033[92mASSISTANT > \033[0m{response.content}")
