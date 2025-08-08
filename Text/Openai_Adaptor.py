@@ -1,11 +1,5 @@
-from .Helper_Classes.Text_Adaptor import Text_Adaptor
-from .Helper_Classes.Message import Message
-from .Helper_Classes.Tool_Call import Tool_Call
-from .Tool import Tool
-from typing import Literal
-
-from openai import OpenAI
-# https://platform.openai.com/docs/api-reference/chat/create?lang=python
+from Common_Imports import *
+from .Helper_Classes.Helper_Classes import *
 
 # there is a lot of duplicate code in here which i should make helper functions for.
 class Openai_Text_Adaptor(Text_Adaptor):
@@ -14,7 +8,7 @@ class Openai_Text_Adaptor(Text_Adaptor):
 
         self.client = OpenAI()
     
-    def get_completion_with_history(self, message_history: list[Message], model: str = "gpt-4o-mini", tools: list[Tool] = [], tool_choice: Literal["none", "auto", "required"] = "auto") -> Message:
+    def get_completion_with_history(self, message_history: list[Message], model: str = "gpt-5-nano", tools: list[Tool] = [], tool_choice: Literal["none", "auto", "required"] = "auto") -> Message:
         messages = []
         for message in message_history:
             message_dict = {}
@@ -122,7 +116,7 @@ class Openai_Text_Adaptor(Text_Adaptor):
             tool_calls = tool_calls
         )
     
-    def _get_tool_string(self, tool: Tool):
+    def _get_tool_string(self, tool: Tool) -> dict[str, Any]:
         # extract the arguments
         arguments = {}
         for argument in tool.arguments:

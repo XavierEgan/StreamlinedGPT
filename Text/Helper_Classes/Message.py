@@ -1,5 +1,4 @@
-from .Tool_Call import Tool_Call
-from typing import Literal
+from ..Common_Imports import *
 
 class Message:
     def __init__(self, content: str, role: Literal["user", "developer", "assistant", "tool"], tool_calls: list[Tool_Call] = [], tool_call_id = ""):

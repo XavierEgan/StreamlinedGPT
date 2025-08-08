@@ -1,18 +1,16 @@
 from .Tool import Tool
-from .Helper_Classes.Message import Message
-from .Helper_Classes.Text_Adaptor import Text_Adaptor
-from typing import Literal
-import json
+from .Helper_Classes.Helper_Classes import *
+from .Common_Imports import *
 
 class Assistant:
     def __init__(self, adaptor: Text_Adaptor):
         self.message_history: list[Message] = []
         self.tools: list[Tool] = []
-        self.tool_log: list[str : callable] = {}
+        self.tool_log: dict[str, Callable] = {}
 
         self.adaptor: Text_Adaptor = adaptor
     
-    def send_message(self, message: str, model: str | None = None, tool_choice: Literal["none", "auto", "required"] = "auto") -> Message:
+    def send_message(self, message: str, model: str | None = None, role:Literal["developer", "user", "assistant"] = "user", tool_choice: Literal["none", "auto", "required"] = "auto") -> Message:
         """
         Returns a Message object. Message.content to retrieve what the model said\n
         message: the message to send to the model\n
@@ -22,7 +20,7 @@ class Assistant:
         self.message_history.append(
             Message(
                 content=message,
-                role="user"
+                role=role
             )
         )
 
@@ -35,6 +33,9 @@ class Assistant:
 
         if model == None:
             del kwargs["model"]
+        
+        if len(self.tools) <= 0:
+            kwargs["tool_choice"] = "none"
 
         response = self.adaptor.get_completion_with_history(**kwargs)
 
@@ -68,6 +69,9 @@ class Assistant:
         }
         if model == None:
             del kwargs["model"]
+        
+        if len(self.tools) <= 0:
+            kwargs["tool_choice"] = "none"
 
         message_history = []
 
@@ -77,8 +81,6 @@ class Assistant:
             return response
 
         message_history = [response] + self._manage_tool_no_history(response)
-
-        response = self.adaptor.get_completion
 
         return response
 
